@@ -1,4 +1,4 @@
-package isAllCharactersUniqueInString
+package solutionsForBookCrackingTheCodingInterview
 
 /**
  * @author Kostiantyn Prysiazhnyi
@@ -22,11 +22,11 @@ class StringCheckForAllUniqueCharacters {
      */
 
     fun checkStringForUniqueness(stringToCheck: String): Boolean {
-        val stringSize = stringToCheck.length
+        val textSize = stringToCheck.length
         println("checkStringForUniqueness stringToCheck  : " + stringToCheck)
         println("checkStringForUniqueness stringToCheck length : " + stringToCheck.length)
-        for (i in 0 until stringSize) {
-            for (j in (i + 1) until stringSize) {
+        for (i in 0 until textSize) {
+            for (j in (i + 1) until textSize) {
                 println("characters to compare (1) : " + stringToCheck[i] + " (2) : " + stringToCheck[j])
                 if (stringToCheck[i] == stringToCheck[j]) {
                     return false
@@ -38,10 +38,11 @@ class StringCheckForAllUniqueCharacters {
 
     fun fastMethodFromTheBook(str: String): Boolean {
         val charSet = BooleanArray(256)
+        var value: Int
         for (i in 0 until str.length) {
-            val value = str[i].toInt()
-            println("character : " + str[i])
-            if (charSet[value]){
+            value = str[i].toInt()
+            println("character : " + str[i] + " value : " + value)
+            if (charSet[value]) {
                 return false
             }
             charSet[value] = true
@@ -54,12 +55,14 @@ class StringCheckForAllUniqueCharacters {
 
 fun main(args: Array<String>) {
     val stringCheckForAllUniqueCharacters = StringCheckForAllUniqueCharacters()
-    if (stringCheckForAllUniqueCharacters.checkStringForUniqueness("qwertyuiope")) {
+/*    if (stringCheckForAllUniqueCharacters.checkStringForUniqueness("qwertyuiope")) {
         println("this String don't contain duplicate characters")
     } else {
         println("this String contains duplicate characters")
 
-    }
+    }*/
 
     stringCheckForAllUniqueCharacters.fastMethodFromTheBook("qwertyuiope")
+    //will return error because 'ś' character have is 347 (our ASCII set is only 256)
+    //stringCheckForAllUniqueCharacters.fastMethodFromTheBook("ś")
 }
