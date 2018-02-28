@@ -32,7 +32,7 @@ fun removeDuplicateCharacters(textToWorkWith: String): String {
     return resultText
 }
 
-//todo create TestCases and write method without additional memory as BooleanArray
+//todo create TestCases and write method without additional memory
 fun main(args: Array<String>) {
     val textToCheck = "hello losers :) :)"
     println("text to delete duplicate characters from : " + textToCheck)

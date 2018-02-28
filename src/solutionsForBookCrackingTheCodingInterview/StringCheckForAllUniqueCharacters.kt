@@ -18,7 +18,7 @@ class StringCheckForAllUniqueCharacters {
     /**
      * 2 Answer (can not use additional data structures)
      * We can use 2 loops to check every character against all others in string.
-     * It will work as InsertAlgorithm with complexity as n^2@author TODO to check it.
+     * It will work as InsertAlgorithm with complexity as n^2
      */
 
     fun checkStringForUniqueness(stringToCheck: String): Boolean {
@@ -55,14 +55,15 @@ class StringCheckForAllUniqueCharacters {
 
 fun main(args: Array<String>) {
     val stringCheckForAllUniqueCharacters = StringCheckForAllUniqueCharacters()
-/*    if (stringCheckForAllUniqueCharacters.checkStringForUniqueness("qwertyuiope")) {
+    if (stringCheckForAllUniqueCharacters.checkStringForUniqueness("qwertyuiope")) {
         println("this String don't contain duplicate characters")
     } else {
         println("this String contains duplicate characters")
 
-    }*/
+    }
 
     stringCheckForAllUniqueCharacters.fastMethodFromTheBook("qwertyuiope")
+
     //will return error because 'ś' character have is 347 (our ASCII set is only 256)
     //stringCheckForAllUniqueCharacters.fastMethodFromTheBook("ś")
 }
