@@ -30,40 +30,37 @@ fun replaceChosenSymbolInString(arrayOfSymbolsToCheck: CharArray, symbolToReplac
      * 1. we need to now count of symbolsToReplace in Array so we can create result_array with correct size.
      */
     val countOfSymbolsToReplace = arrayOfSymbolsToCheck.count { it == symbolToReplace }
-    println("arrayToCheck size : " + arrayOfSymbolsToCheck.size)
-    println("countOfSymbolsToReplace : " + countOfSymbolsToReplace)
     if (countOfSymbolsToReplace <= 0) {
         return arrayOfSymbolsToCheck
     }
     val resultArraySize = (arrayOfSymbolsToCheck.size - countOfSymbolsToReplace) + countOfSymbolsToReplace * replacementSymbols.size
-    println("result array size  : " + resultArraySize)
     val resultArray = CharArray(resultArraySize)
-    var innerLoopIndex = 0
-    arrayOfSymbolsToCheck.forEachIndexed { index, symbol ->
-        if (innerLoopIndex == 0 || index == innerLoopIndex) {
-            println("inside of additional if statement")
-            if (symbol == symbolToReplace) {
-                for (i in 0 until replacementSymbols.size) {
-                    println("inside second loop replacementSymbol = " + replacementSymbols[i])
-                    resultArray[index + i] = replacementSymbols[i]
-                    innerLoopIndex++
-                }
-            } else {
-                resultArray[index] = symbol
-                innerLoopIndex++
+    var index = 0
+
+    arrayOfSymbolsToCheck.forEach { symbol ->
+        if (symbol == symbolToReplace) {
+            for (i in 0 until replacementSymbols.size) {
+                resultArray[index] = replacementSymbols[i]
+                index++
+
             }
 
-        }
-        println("mainLopIndex : " + index)
-        println("innerLoopIndex : " + innerLoopIndex)
+        } else {
+            resultArray[index] = symbol
+            index++
 
+        }
     }
+
     return resultArray
 }
 
 fun main(args: Array<String>) {
-    val text = charArrayOf('s', 'a', 'y', ' ', 'h', 'e', 'l', 'l', 'o', '!', '!', '!')
-    println("Text to change : " + Arrays.toString(text))
+    val text = charArrayOf('s', 'a', '!', ' ', '!', 'e', 'l', 'l', 'o', '!', '!', '!')
+    println("Text to change : " + Arrays.toString(text) + "\n")
+    println("method to change chosen symbol with one replacement symbol")
     println(Arrays.toString(replaceChosenSymbolInString(text, 'l', 'L')))
+    println("\n\nSecond simulation \n\n")
+    println("method to change chosen symbol with any amount of symbols")
     println(Arrays.toString(replaceChosenSymbolInString(text, '!', charArrayOf(':', ')'))))
 }
