@@ -16,93 +16,87 @@ import java.util.*
  * However a small amount of extra storage space is allowed for auxiliary variables. The input is usually overwritten by the output as the algorithm executes.
  * In-place algorithm updates input sequence only through replacement or swapping of elements. An algorithm which is not
  * in-place is sometimes called not-in-place or out-of-place.
- *
- * 1)to test it we need to create matrix our matrix or just use some image.
- * 3)do the rotation of matrix (matrix 3x3 -(initial 1x3 value saved in x) -> 1x1 going to 1x3 index -> 1x3 moves to 1x1 index
- * -> and so on for 1x,2x,3x .....(that mean we can do it in place with one initial array and additional primitive variable)
- */
-
-/**
- * So to do it in place I think we need to use only few variable no arrays, collections .TODO hard to find some algorithm for all sizes of matrix (more time)
- * In other ways with using additional data structure more easier
  */
 
 class ImageRotation {
     private val defaultByteArray = byteArrayOf(0, 0, 0, 0)
 
+    /**
+     * Rotate matrix for 90 degree
+     */
     fun rotateTwoDimensionMatrix(imageArray: Array<Array<ByteArray>>, rotationAngle: Int): Array<Array<ByteArray>> {
         return if (imageArray.size != imageArray[0].size) {
             rotateMatrixNotInPlaceAlgorithm(imageArray)
         } else {
-            if (imageArray.size % 2 == 0) {
-                rotatePairedSizeMatrix(imageArray)
-            } else {
-                rotateNonPairedSizeMatrix(imageArray)
-            }
-        }
+            /**
+             * first of all it is impossible to do in place if our matrix (xDimension.length != yDimension.length) because we need
+             * to change the size of our arrays(which mean creating new array) can't do it in one place.
+             * We also can do it recursively.
+             */
+            rotateMatrixInPlaceAlgorithm(imageArray)
 
+        }
 
     }
 
     /**
-     * first of all it is impossible to do in place if our matrix (xDimension.length != yDimension.length) because we need
-     * to change the size of our arrays(which mean creating new array) can't do it in one place.
-     * We also can do it recursively.
+     * Rotate matrix in place, by changing initial given matrix and using few primitive variables.
      */
-    private fun rotateNonPairedSizeMatrix(imageArray: Array<Array<ByteArray>>): Array<Array<ByteArray>> {
-        println("rotateNonPairedSizeMatrix")
-        var firstIndex = 0
+    private fun rotateMatrixInPlaceAlgorithm(imageArray: Array<Array<ByteArray>>): Array<Array<ByteArray>> {
+        println("\n     rotateMatrixInPlaceAlgorithm\n")
+        val repetitionTimes: Int = if (imageArray.size % 2 == 0) {
+            -1
+        } else {
+            1
+        }
         var startIndex = 0
         var matrixSize = imageArray.size
         var additionalPixel: ByteArray
+
+        var firstElementIndex = 0
         var decreaseIndex: Int
-        var lastIndex: Int
+        var lastElementIndex: Int
+        var afterRotationMatrixSize = imageArray.size
 
-        var whileSize = imageArray.size
 
-        while (whileSize > 1) {
-            //5x5
-            lastIndex = matrixSize - 1
+        while (afterRotationMatrixSize > repetitionTimes) {
+            println("ROTATION")
+            lastElementIndex = matrixSize - 1
             decreaseIndex = matrixSize - 1
             for (incrementalIndex in startIndex until matrixSize - 1) {
-                println("   incremental index = " + incrementalIndex)
-                println("   decrease index = " + decreaseIndex)
-
-                additionalPixel = imageArray[firstIndex][incrementalIndex]
+                additionalPixel = imageArray[firstElementIndex][incrementalIndex]
 
                 //4 move to 1
-                println("move index[" + incrementalIndex + "][" + lastIndex + "] into index[" + firstIndex + "][" + incrementalIndex + "]")
-                imageArray[firstIndex][incrementalIndex] = imageArray[incrementalIndex][lastIndex]
+                println("move index[" + incrementalIndex + "][" + lastElementIndex + "] into index[" + firstElementIndex + "][" + incrementalIndex + "]")
+                imageArray[firstElementIndex][incrementalIndex] = imageArray[incrementalIndex][lastElementIndex]
 
                 //3 move to 4
-                println("move index[" + lastIndex + "][" + decreaseIndex + "] into index[" + incrementalIndex + "][" + lastIndex + "]")
-                imageArray[incrementalIndex][lastIndex] = imageArray[lastIndex][decreaseIndex]
+                println("move index[" + lastElementIndex + "][" + decreaseIndex + "] into index[" + incrementalIndex + "][" + lastElementIndex + "]")
+                imageArray[incrementalIndex][lastElementIndex] = imageArray[lastElementIndex][decreaseIndex]
 
                 //2 move 3
-                println("move index[" + decreaseIndex + "][" + firstIndex + "] into index[" + lastIndex + "][" + decreaseIndex + "]")
-                imageArray[lastIndex][decreaseIndex] = imageArray[decreaseIndex][firstIndex]
+                println("move index[" + decreaseIndex + "][" + firstElementIndex + "] into index[" + lastElementIndex + "][" + decreaseIndex + "]")
+                imageArray[lastElementIndex][decreaseIndex] = imageArray[decreaseIndex][firstElementIndex]
 
                 //1 move to 2
-                println("move index[" + firstIndex + "][" + incrementalIndex + "] into index[" + decreaseIndex + "][" + firstIndex + "]")
-                imageArray[decreaseIndex][firstIndex] = additionalPixel
-
+                println("move index[" + firstElementIndex + "][" + incrementalIndex + "] into index[" + decreaseIndex + "][" + firstElementIndex + "]")
+                imageArray[decreaseIndex][firstElementIndex] = additionalPixel
 
                 decreaseIndex--
 
             }
             matrixSize--
-            whileSize -= 2
-            firstIndex++
+            afterRotationMatrixSize -= 2
+            firstElementIndex++
             startIndex++
-
-            println("\n\nROTATION")
+            println("\n result of rotation")
             for (xArray in imageArray) {
                 for (yArray in xArray) {
                     print(Arrays.toString(yArray) + "  ")
                 }
                 print("\n")
             }
-            println("END OF ROTATION \n\n")
+            println("END OF ROTATION \n")
 
 
         }
@@ -110,13 +104,8 @@ class ImageRotation {
 
     }
 
-    private fun rotatePairedSizeMatrix(imageArray: Array<Array<ByteArray>>): Array<Array<ByteArray>> {
-        println("rotatePairedSizeMatrix")
-        return imageArray
-    }
-
     private fun rotateMatrixNotInPlaceAlgorithm(imageArray: Array<Array<ByteArray>>): Array<Array<ByteArray>> {
-        println("rotateMatrixNotInPlaceAlgorithm")
+        println("\n         rotateMatrixNotInPlaceAlgorithm\n")
         var rotationOfYArray: Array<ByteArray>
         val resultImageArray = Array(imageArray[0].size, { Array(imageArray.size, { defaultByteArray }) })
         for (xIndex in 0 until imageArray.size) {
@@ -165,9 +154,9 @@ fun main(args: Array<String>) {
         }
         print("\n")
     }
-    println("After rotation : \n\n\n ")
     val resultArray = ImageRotation().rotateTwoDimensionMatrix(imageArray, 89)
 
+    println("________________________________RESULT after running algorithm:_____________________________ \n ")
     for (xArray in resultArray) {
         for (yArray in xArray) {
             print(Arrays.toString(yArray) + "  ")
