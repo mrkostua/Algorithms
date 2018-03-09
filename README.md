@@ -1,2 +1,2 @@
-# Algorithms
-Some code soultions for "Introduction to Algorithms" book.
+# Solution for "Cracking the Coding Interview" book
+Code soultions for "Cracking the Coding Interview" book in Kotlin.
