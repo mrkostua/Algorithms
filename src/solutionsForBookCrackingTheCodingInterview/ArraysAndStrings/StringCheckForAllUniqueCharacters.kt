@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview
+package solutionsForBookCrackingTheCodingInterview.ArraysAndStrings
 
 /**
  * @author Kostiantyn Prysiazhnyi

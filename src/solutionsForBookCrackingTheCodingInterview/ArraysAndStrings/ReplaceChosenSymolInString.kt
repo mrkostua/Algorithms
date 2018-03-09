@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview
+package solutionsForBookCrackingTheCodingInterview.ArraysAndStrings
 
 import java.util.*
 
