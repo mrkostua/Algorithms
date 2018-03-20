@@ -1,7 +1,6 @@
 package solutionsForBookCrackingTheCodingInterview.LinkedList
 
 import solutionsForBookCrackingTheCodingInterview.LinkedList2
-import java.util.*
 
 /**
  * @author Kostiantyn Prysiazhnyi
