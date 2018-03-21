@@ -1,7 +1,5 @@
 package solutionsForBookCrackingTheCodingInterview.LinkedList
 
-import solutionsForBookCrackingTheCodingInterview.LinkedList2
-
 /**
  * @author Kostiantyn Prysiazhnyi
  * @created on 3/19/2018

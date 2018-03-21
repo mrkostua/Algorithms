@@ -1,7 +1,5 @@
 package solutionsForBookCrackingTheCodingInterview.LinkedList
 
-import solutionsForBookCrackingTheCodingInterview.LinkedList2
-
 /**
  * @author Kostiantyn Prysiazhnyi
  * @created on 3/20/2018
@@ -9,14 +7,11 @@ import solutionsForBookCrackingTheCodingInterview.LinkedList2
  */
 
 /**
+ * Task :
  * You have two numbers represented by a linked list, where each node contains a single
  * digit. The digits are stored in reverse order, such that the 1’s digit is at the head of
  * the list. Write a function that adds the two numbers and returns the sum as a linked
  * list.
- */
-
-/**
- * Idea is to create fun to add, sub, div, mul with one main method.
  */
 
 /**
@@ -40,7 +35,7 @@ fun addNumbers(firstNumber: LinkedList2.Node<Int>, secondNumber: LinkedList2.Nod
         addNumbers(if (firstNumber.next == null) {
             firstNumber.next = LinkedList2.Node(0, null)
             firstNumber.next
-        } else firstNumber.next ,
+        } else firstNumber.next,
                 if (secondNumber.next == null) {
                     secondNumber.next = LinkedList2.Node(0, null)
                     secondNumber
@@ -53,7 +48,18 @@ fun addNumbers(firstNumber: LinkedList2.Node<Int>, secondNumber: LinkedList2.Nod
 
 }
 
-//TODO print in normal order  not reverse
+private fun <T> reverseList(head: LinkedList2.Node<T>): LinkedList2<T> {
+    val reverseList = LinkedList2<T>()
+    var tmp: LinkedList2.Node<T>? = head
+    while (tmp != null) {
+        reverseList.addFirst(tmp.data)
+        tmp = tmp.next
+
+    }
+    return reverseList
+
+}
+
 fun main(args: Array<String>) {
     val n1 = LinkedList2<Int>()
     val n2 = LinkedList2<Int>()
@@ -64,11 +70,10 @@ fun main(args: Array<String>) {
     n2.addFirst(9)
     n2.addLast(5)
     n2.addLast(9)
-    n2.addLast(9)
-    n2.addLast(9)
 
-    println("initial data: \n first number : " + n1.toString() + " second number : " + n2.toString())
+    println("initial data: \nfirst number : " + reverseList(n1.head).toString() +
+            " second number : " + reverseList(n2.head).toString())
     addNumbers(n1.head, n2.head)
-    println("Result of adding 2 numbers : " + n1.toString())
+    println("\nResult of adding 2 numbers : " + reverseList(n1.head).toString())
 
 }
