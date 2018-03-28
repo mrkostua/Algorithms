@@ -8,10 +8,10 @@ import java.util.*
  */
 
 open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
-    private val DEFAULIT_CAPCITY = 20
-    private var topPointer = -1 //empty stack
-    private val arrayBuffer: Array<T?> = if (initialCapacity <= 0) {
-        arrayOfNulls<Any>(DEFAULT_BUFFER_SIZE) as Array<T?>
+    public val defaultCapacity = 20
+    public var topPointer = -1 //empty stack
+    public val arrayBuffer: Array<T?> = if (initialCapacity <= 0) {
+        arrayOfNulls<Any>(defaultCapacity) as Array<T?>
 
     } else {
         arrayOfNulls<Any>(initialCapacity) as Array<T?>
@@ -19,7 +19,7 @@ open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
     }
 
     override fun push(item: T): T {
-        if (topPointer == arrayBuffer.size) {
+        if (topPointer == arrayBuffer.size-1) {
             throw RuntimeException("push - stack is full")
 
         }
