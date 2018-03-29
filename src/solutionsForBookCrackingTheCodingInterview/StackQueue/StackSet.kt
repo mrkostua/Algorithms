@@ -1,5 +1,7 @@
 package solutionsForBookCrackingTheCodingInterview.StackQueue
 
+import java.util.*
+
 /**
  * @author Kostiantyn Prysiazhnyi
  * @created on 3/27/2018
@@ -19,69 +21,89 @@ package solutionsForBookCrackingTheCodingInterview.StackQueue
  * Implement a function popAt(int index) which performs a pop operation on a specific
  * sub-stack.
  */
+
+/**
+ * Solution form the book is slightly different -> the use ArrayList as container for Stacks, so in this case you don't need to
+ * maintain array of pointers but it is more time/memory complex solution (as Used arrayList of arrayLists(stacks if implemented using array).
+ * In this case we are using one ArrayLists divided into smaller stacks using stackPointers.
+ */
 class StackSet<T>(initialCapacity: Int, private val stackMaxSize: Int) : ArrayStack<T>(initialCapacity) {
-    public val stackPointers: Array<Int> = Array(arrayBuffer.size / stackMaxSize, { -1 })
+    private val stackPointers: Array<Int> = if (arrayBuffer.size % stackMaxSize > 0) {
+        Array(arrayBuffer.size / stackMaxSize + 1, { -1 })
+    } else {
+        Array(arrayBuffer.size / stackMaxSize, { -1 })
+    }
+    /**
+     * space efficient (adding array of empty spaces in subArray, so push() will first add element to this stack)
+     */
+    private val emptySpaceIndexes = ArrayList<Int>(initialCapacity - stackMaxSize)
 
     override fun pop(): T {
         val element = peek()
-        val topSubStackPointer = getTopSubStackIndex()
+        val stackPointer = getSubStackNumber(topPointer)
         arrayBuffer[topPointer] = null
-        stackPointers[topSubStackPointer] -= 1
+        stackPointers[stackPointer] -= 1
         topPointer--
         return element
 
     }
 
     override fun push(item: T): T {
-        if (topPointer == stackMaxSize * stackPointers.size - 1) {
+        if (emptySpaceIndexes.isEmpty() && topPointer == arrayBuffer.size - 1) {
             throw RuntimeException("push - stack is full")
 
         }
-        topPointer++
-        val topSubStackPointer = getTopSubStackIndex()
+        if (emptySpaceIndexes.isEmpty()) {
+            topPointer++
+            val topSubStackPointer = getSubStackNumber(topPointer)
+            arrayBuffer[++stackPointers[topSubStackPointer]] = item
 
-        stackPointers[topSubStackPointer] += 1
-        arrayBuffer[topPointer] = item
-        println("topSubStackPointer " + topSubStackPointer)
-        println("stackPointers[topSubStackPointer] : " + stackPointers[topSubStackPointer])
-        println("topPointer : " + topPointer)
+            if (stackPointers[topSubStackPointer] % stackMaxSize == stackMaxSize - 1) {
+                stackPointers[topSubStackPointer + 1] = topPointer
 
-        if (stackPointers[topSubStackPointer] % stackMaxSize == stackMaxSize - 1) {
-            println("stackPointers[topSubStackPointer] == stackMaxSize - 1 " + true)
-            stackPointers[topSubStackPointer + 1] = topPointer
+            }
 
+        } else {
+            val subStackNumber = getSubStackNumber(emptySpaceIndexes[0])
+            emptySpaceIndexes.removeAt(0)
+            if (stackPointers[subStackNumber] % stackMaxSize < stackMaxSize - 1) {
+                stackPointers[subStackNumber] += 1
+                arrayBuffer[stackPointers[subStackNumber]] = item
+
+            } else {
+                throw RuntimeException("push to subStack(not a top subStack) with empty places Error")
+
+            }
         }
         return item
     }
 
     fun popAt(subStackIndex: Int): T {
         when {
-            stackPointers.size <= subStackIndex && subStackIndex < 0 ->
+            (stackPointers.size <= subStackIndex && subStackIndex < 0) ->
                 throw UnsupportedOperationException("popAt : subStack with index : " + subStackIndex + " not exist")
-            stackPointers[subStackIndex] == -1 -> throw UnsupportedOperationException("subStack is empty")
+            stackPointers[subStackIndex] == -1 ->
+                throw UnsupportedOperationException("subStack is empty")
 
+            stackPointers[subStackIndex] != topPointer -> emptySpaceIndexes.add(stackPointers[subStackIndex])
             stackPointers[subStackIndex] == topPointer -> topPointer--
 
         }
-        println("\npopAt")
-        println("stackPointers[subStackIndex] " + stackPointers[subStackIndex])
         val element = arrayBuffer[stackPointers[subStackIndex]]
+
         arrayBuffer[stackPointers[subStackIndex]] = null
         stackPointers[subStackIndex] -= 1
         return element!!
     }
 
-    private fun getTopSubStackIndex(): Int {
-        if (isEmpty() || topPointer < stackMaxSize) {
+    private fun getSubStackNumber(index: Int): Int {
+        if (isEmpty() || index < stackMaxSize) {
             return 0
-
         }
-        return topPointer / stackMaxSize
-        //+ if (topPointer % stackMaxSize > 0) 1 else 0
-
+        return index / stackMaxSize
     }
 
-    public fun printStack() {
+    fun printStack() {
         println("\nstack size : " + arrayBuffer.size)
         for (i in arrayBuffer) {
             if (i == null) {
@@ -93,37 +115,30 @@ class StackSet<T>(initialCapacity: Int, private val stackMaxSize: Int) : ArraySt
     }
 }
 
-
 fun main(args: Array<String>) {
-    val multiStack = StackSet<Int>(40, 10)
-    for (i in 0..24) {
+    //testing
+    val multiStack = StackSet<Int>(46, 10)
+    for (i in 0 until 46) {
         multiStack.push(i)
     }
-    println("initial data of the stack : ")
-    multiStack.printStack()
+    with(multiStack) {
+        printStack()
+        for (i in 0..3) {
+            popAt(0)
+        }
+        push(3)
+        push(3)
+        push(3)
+        push(3)
+        printStack()
+        pop()
+        pop()
+        pop()
+        pop()
+        push(3)
+        printStack()
 
 
-    multiStack.pop()
-    multiStack.pop()
-    multiStack.printStack()
-    multiStack.popAt(0)
-    multiStack.printStack()
-
-    println("\ntesting : ")
-    multiStack.stackPointers.forEach { print(" " + it) }
-
-    multiStack.popAt(1)
-    multiStack.popAt(1)
-    multiStack.popAt(1)
-    multiStack.printStack()
-    multiStack.popAt(2)
-    multiStack.popAt(2)
-    multiStack.printStack()
-    multiStack.push(30)
-    multiStack.push(30)
-    multiStack.push(30)
-    multiStack.printStack()
-
+    }
 
 }
-
