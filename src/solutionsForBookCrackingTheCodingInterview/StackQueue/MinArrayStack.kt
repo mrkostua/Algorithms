@@ -1,8 +1,5 @@
 package solutionsForBookCrackingTheCodingInterview.StackQueue
 
-import java.util.*
-
-
 /**
  * @author Kostiantyn Prysiazhnyi
  * @created on 3/21/2018
