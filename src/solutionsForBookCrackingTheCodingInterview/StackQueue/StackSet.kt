@@ -103,16 +103,6 @@ class StackSet<T>(initialCapacity: Int, private val stackMaxSize: Int) : ArraySt
         return index / stackMaxSize
     }
 
-    fun printStack() {
-        println("\nstack size : " + arrayBuffer.size)
-        for (i in arrayBuffer) {
-            if (i == null) {
-                print(" null")
-            } else {
-                print(" " + i.toString())
-            }
-        }
-    }
 }
 
 fun main(args: Array<String>) {

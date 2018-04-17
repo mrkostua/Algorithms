@@ -117,8 +117,10 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
     }
 
     private fun tryToMoveDiskFromRodToRod(fromRod: ArrayStack<Int>, toRod: ArrayStack<Int>): Boolean {
-        return if (fromRod.peek() > toRod.peek()) {
+        println("tryToMoveDiskFromRodToRod peek() fromRod : " + fromRod.peek() + " toRod : " + toRod.peek())
+        return if (fromRod.peek() < toRod.peek()) {
             toRod.push(fromRod.pop())
+            println("tryToMoveDiskFromRodToRod() moved successfully")
             true
         } else {
             false
@@ -135,6 +137,7 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
     }
 
     private fun getNumberByRod(rod: ArrayStack<Int>): Int {
+        //TODO don't works properly
         return when (rod) {
             firstRodDisks -> 0
             secondRodDisks -> 1
@@ -142,6 +145,7 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
             else -> throw UnsupportedOperationException("max number of rods is 3 (0,1,2) ")
         }
     }
+
 
     // TODO work on this method and test it before using in algorithm
     inner class MovingTools {
@@ -152,11 +156,13 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
          * This method is only for moving disk from 2rod to 1rod or 3rod!
          */
         fun recursiveMoveDiskFromRodToRod(fromRodNumber: Int, toRodNumber: Int) {
+            println("recursiveMoveDiskFromRodToRod() fromRodNumber : " + fromRodNumber + " toRodNumber : " + toRodNumber)
             fromRod = getRodByNumber(fromRodNumber)
             toRod = getRodByNumber(toRodNumber)
-            if (fromRod.peek() > toRod.peek()) {
+            if (fromRod.peek() < toRod.peek()) {
                 //good we can move our element and finish this method
                 toRod.push(fromRod.pop())
+                println("recursiveMD pushing from rod : " + fromRodNumber + " to rod #" + toRodNumber)
 
             } else {
                 moveSmallDiskAndContinueRefactoring(fromRodNumber, toRodNumber)
@@ -164,16 +170,20 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
             }
         }
 
+        private val firstRodNumber = 0
+        private val thirdRodNumber = 2
         /**
          * in this case the move is done from rod(toRod) to fromRod
          * and after from (fromRod) to (firstRod or ThirdRod)
          */
         //TODO after testing this method can be smaller
         private fun moveSmallDiskAndContinueRefactoring(fromRodNumber: Int, toRodNumber: Int) {
+            println("moveSmallDiskAndContinueRefactoring() fromRodNumber : " + fromRodNumber + " toRodNumber : " + toRodNumber)
             tryToMoveDiskFromRodToRod(toRod, fromRod)
+            println("moveSD when() : " + toRodNumber)
             when (toRodNumber) {
-                getNumberByRod(firstRodDisks) -> {
-                    if (fromRod.peek() > getRodByNumber(fromRodNumber + 1).peek()) {
+                firstRodNumber -> {
+                    if (fromRod.peek() < getRodByNumber(fromRodNumber + 1).peek()) {
                         tryToMoveDiskFromRodToRod(fromRod, getRodByNumber(fromRodNumber + 1))
                         //we have successfully moved from 1rod to 3rod and now doing recursive call to try to move once more disk from 2rod to 1rod
                         recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
@@ -187,14 +197,19 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
 
                     }
                 }
-                getNumberByRod(thirdRodDisks) -> {
-                    if (fromRod.peek() > getRodByNumber(fromRodNumber - 1).peek()) {
+
+                thirdRodNumber -> {
+                    printAllRods(firstRodDisks, secondRodDisks, thirdRodDisks)
+                    if (fromRod.peek() < getRodByNumber(fromRodNumber - 1).peek()) {
+                        println("when(thirdRodNumber) inside if : ")
+                        fromRod.printStack()
+                        println()
                         tryToMoveDiskFromRodToRod(fromRod, getRodByNumber(fromRodNumber - 1))
                         //we have successfully moved from 3rod to 1rod and now doing recursive call to try to move once more disk from 2rod to 3rod
                         recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
                         //after recursive call we theoretically have moved this disk
                         //so now we need to try to move our main disk once more
-                        recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
+                        //recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
 
                     } else {
                         //in this step we already moved disk from 3rod to 2rod but we can't move it to 1rod so recursive call is done with parameters as 2rod to 1rod
@@ -202,6 +217,7 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
 
                     }
                 }
+
                 else -> throw UnsupportedOperationException("this method moves disk only to 2rod or 3rod")
 
             }
@@ -215,5 +231,31 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
 fun main(args: Array<String>) {
     //3 stacks -> rods
     // one is fill with disks ascending order from the top
+    val rod1 = ArrayStack<Int>(4)
+    val rod2 = ArrayStack<Int>(4)
+    val rod3 = ArrayStack<Int>(4)
+    for (elm in 3 downTo 2) {
+        rod1.push(elm)
+
+    }
+    rod2.push(1)
+    rod3.push(0)
+    printAllRods(rod1, rod2, rod3)
+    val towerOfHanoi = TowerOfHanoi(rod1, rod2, rod3)
+    towerOfHanoi.MovingTools().recursiveMoveDiskFromRodToRod(1, 2)
+    printAllRods(rod1, rod2, rod3)
+
+}
+
+fun printAllRods(rod1: ArrayStack<Int>, rod2: ArrayStack<Int>,
+                 rod3: ArrayStack<Int>) {
+    print("\nrod1 : ")
+    rod1.printStack()
+    print("\nrod2 : ")
+    rod2.printStack()
+    print("\nrod3 : ")
+    rod3.printStack()
+    println()
+
 
 }
