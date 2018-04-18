@@ -94,11 +94,11 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
     }
 
     private fun recursiveSecondRodDiskToFirstRodDisk() {
-        recursiveMethods.recursiveMoveDiskFromRodToRod(getNumberByRod(secondRodDisks), getNumberByRod(firstRodDisks))
+        recursiveMethods.moveDiskFromRodToRod(secondRodDisks, firstRodDisks)
     }
 
     private fun recursiveSecondRodDiskToThirdRodDisk() {
-        recursiveMethods.recursiveMoveDiskFromRodToRod(getNumberByRod(secondRodDisks), getNumberByRod(thirdRodDisks))
+        recursiveMethods.moveDiskFromRodToRod(secondRodDisks, thirdRodDisks)
 
     }
 
@@ -117,108 +117,68 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
     }
 
     private fun tryToMoveDiskFromRodToRod(fromRod: ArrayStack<Int>, toRod: ArrayStack<Int>): Boolean {
-        println("tryToMoveDiskFromRodToRod peek() fromRod : " + fromRod.peek() + " toRod : " + toRod.peek())
+        println("tryToMoveDiskFromRodToRod rodNumbers( " + fromRod.stackNumber + " , " + toRod.stackNumber + " )")
         return if (fromRod.peek() < toRod.peek()) {
             toRod.push(fromRod.pop())
             println("tryToMoveDiskFromRodToRod() moved successfully")
             true
         } else {
+            println("tryToMoveDiskFromRodToRod() not moved")
             false
         }
     }
 
-    private fun getRodByNumber(rodNumber: Int): ArrayStack<Int> {
-        return when (rodNumber) {
-            0 -> firstRodDisks
-            1 -> secondRodDisks
-            2 -> thirdRodDisks
-            else -> throw UnsupportedOperationException("max number of rods is 3 (0,1,2) ")
-        }
-    }
-
-    private fun getNumberByRod(rod: ArrayStack<Int>): Int {
-        //TODO don't works properly
-        return when (rod) {
-            firstRodDisks -> 0
-            secondRodDisks -> 1
-            thirdRodDisks -> 2
-            else -> throw UnsupportedOperationException("max number of rods is 3 (0,1,2) ")
-        }
-    }
-
-
-    // TODO work on this method and test it before using in algorithm
+    // TODO add tasks to trello : (1 write few unit tests to check how it works with different input) try different input, etc)
+    //TODO but this method will be used inside algorithm so less chances to use wrong input values)
     inner class MovingTools {
-        private lateinit var fromRod: ArrayStack<Int>
-        private lateinit var toRod: ArrayStack<Int>
-
         /**
          * This method is only for moving disk from 2rod to 1rod or 3rod!
          */
-        fun recursiveMoveDiskFromRodToRod(fromRodNumber: Int, toRodNumber: Int) {
-            println("recursiveMoveDiskFromRodToRod() fromRodNumber : " + fromRodNumber + " toRodNumber : " + toRodNumber)
-            fromRod = getRodByNumber(fromRodNumber)
-            toRod = getRodByNumber(toRodNumber)
-            if (fromRod.peek() < toRod.peek()) {
+        fun moveDiskFromRodToRod(fromRod: ArrayStack<Int>, toRod: ArrayStack<Int>) {
+            println("moveDiskFromRodToRod( " + fromRod.stackNumber + " , " + toRod.stackNumber + " )")
+            if (tryToMoveDiskFromRodToRod(fromRod, toRod)) {
                 //good we can move our element and finish this method
-                toRod.push(fromRod.pop())
-                println("recursiveMD pushing from rod : " + fromRodNumber + " to rod #" + toRodNumber)
+                println("moveDiskFromRodToRod() was successful without recursion")
 
             } else {
-                moveSmallDiskAndContinueRefactoring(fromRodNumber, toRodNumber)
+                recursiveMoveDiskFromRodToRod(fromRod, toRod)
 
             }
         }
 
-        private val firstRodNumber = 0
-        private val thirdRodNumber = 2
         /**
          * in this case the move is done from rod(toRod) to fromRod
          * and after from (fromRod) to (firstRod or ThirdRod)
          */
-        //TODO after testing this method can be smaller
-        private fun moveSmallDiskAndContinueRefactoring(fromRodNumber: Int, toRodNumber: Int) {
-            println("moveSmallDiskAndContinueRefactoring() fromRodNumber : " + fromRodNumber + " toRodNumber : " + toRodNumber)
-            tryToMoveDiskFromRodToRod(toRod, fromRod)
-            println("moveSD when() : " + toRodNumber)
-            when (toRodNumber) {
-                firstRodNumber -> {
-                    if (fromRod.peek() < getRodByNumber(fromRodNumber + 1).peek()) {
-                        tryToMoveDiskFromRodToRod(fromRod, getRodByNumber(fromRodNumber + 1))
-                        //we have successfully moved from 1rod to 3rod and now doing recursive call to try to move once more disk from 2rod to 1rod
-                        recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
+        private fun recursiveMoveDiskFromRodToRod(fromRod: ArrayStack<Int>, toRod: ArrayStack<Int>) {
+            println("recursiveMoveDiskFromRodToRod( " + fromRod.stackNumber + " , " + toRod.stackNumber + " )")
+            tryToMoveDiskFromRodToRod(toRod, fromRod) // we can this disk because fromRod > toRod
+            printAllRods(firstRodDisks, secondRodDisks, thirdRodDisks)//testing
+            when (toRod.stackNumber) {
+                firstRodDisks.stackNumber -> {
+                    moveSmallDiskFirstRod(fromRod, thirdRodDisks)
 
-                    } else {
-                        //in this step we already moved disk from 1rod to 2rod but we can't move it to 3rod so recursive call is done with parameters as 2rod to 3rod
-                        recursiveMoveDiskFromRodToRod(fromRodNumber, fromRodNumber + 1)
-                        //after recursive call we theoretically have moved this disk
-                        //so now we need to try to move our main disk once more
-                        recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
-
-                    }
                 }
+                thirdRodDisks.stackNumber -> {
+                    moveSmallDiskFirstRod(fromRod, firstRodDisks)
 
-                thirdRodNumber -> {
-                    printAllRods(firstRodDisks, secondRodDisks, thirdRodDisks)
-                    if (fromRod.peek() < getRodByNumber(fromRodNumber - 1).peek()) {
-                        println("when(thirdRodNumber) inside if : ")
-                        fromRod.printStack()
-                        println()
-                        tryToMoveDiskFromRodToRod(fromRod, getRodByNumber(fromRodNumber - 1))
-                        //we have successfully moved from 3rod to 1rod and now doing recursive call to try to move once more disk from 2rod to 3rod
-                        recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
-                        //after recursive call we theoretically have moved this disk
-                        //so now we need to try to move our main disk once more
-                        //recursiveMoveDiskFromRodToRod(fromRodNumber, toRodNumber)
-
-                    } else {
-                        //in this step we already moved disk from 3rod to 2rod but we can't move it to 1rod so recursive call is done with parameters as 2rod to 1rod
-                        recursiveMoveDiskFromRodToRod(fromRodNumber, fromRodNumber - 1)
-
-                    }
                 }
-
                 else -> throw UnsupportedOperationException("this method moves disk only to 2rod or 3rod")
+            }
+            println("recursiveMoveDiskFromRodToRod() try to move()main disk after changes")
+            printAllRods(firstRodDisks, secondRodDisks, thirdRodDisks)
+            moveDiskFromRodToRod(fromRod, toRod)//and now doing recursive call to try to move once more disk from 2rod to 3rod
+
+        }
+
+        //TODO rename this method
+        private fun moveSmallDiskFirstRod(fromRod: ArrayStack<Int>, toRod: ArrayStack<Int>) {
+            println("moveSmallDiskFirstRod()")
+            if (tryToMoveDiskFromRodToRod(fromRod, toRod)) {
+                return //we have successfully moved from fromRod to toRod
+
+            } else {
+                moveDiskFromRodToRod(fromRod, toRod)//can't move it so trying to move away one disk from toRod
 
             }
         }
@@ -231,20 +191,18 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
 fun main(args: Array<String>) {
     //3 stacks -> rods
     // one is fill with disks ascending order from the top
-    val rod1 = ArrayStack<Int>(4)
-    val rod2 = ArrayStack<Int>(4)
-    val rod3 = ArrayStack<Int>(4)
-    for (elm in 3 downTo 2) {
-        rod1.push(elm)
-
-    }
-    rod2.push(1)
-    rod3.push(0)
+    val rod1 = ArrayStack<Int>(4, 0)
+    val rod2 = ArrayStack<Int>(4, 1)
+    val rod3 = ArrayStack<Int>(4, 2)
+    rod1.push(4)
+    rod2.push(3)
+    rod3.push(2)
+    rod3.push(1)
     printAllRods(rod1, rod2, rod3)
+
     val towerOfHanoi = TowerOfHanoi(rod1, rod2, rod3)
-    towerOfHanoi.MovingTools().recursiveMoveDiskFromRodToRod(1, 2)
+    towerOfHanoi.MovingTools().moveDiskFromRodToRod(rod2, rod3)
     printAllRods(rod1, rod2, rod3)
-
 }
 
 fun printAllRods(rod1: ArrayStack<Int>, rod2: ArrayStack<Int>,

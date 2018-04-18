@@ -7,7 +7,7 @@ import java.util.*
  * @created on 3/23/2018
  */
 
-open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
+open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : Stack<T>() {
     public val defaultCapacity = 20
     public var topPointer = -1 //empty stack
     public val arrayBuffer: Array<T?> = if (initialCapacity <= 0) {
@@ -22,6 +22,7 @@ open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
         get() = arrayBuffer.size
 
     override fun push(item: T): T {
+        println("push() item : " + item.toString())
         if (topPointer == arrayBuffer.size - 1) {
             throw RuntimeException("push - stack is full")
 
@@ -34,6 +35,7 @@ open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
 
     override fun pop(): T {
         val k = peek()
+        println("pop() item : " + k.toString())
         arrayBuffer[topPointer] = null
         topPointer--
         return k
@@ -49,9 +51,9 @@ open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
     }*/
 
     //TODO for using in TowerOfHanoi.kt
-        override fun peek(): T {
+    override fun peek(): T {
         if (isEmpty()) {
-            return -1 as T
+            return Integer.MAX_VALUE as T
 
         }
         return arrayBuffer[topPointer]!!
@@ -64,7 +66,7 @@ open class ArrayStack<T>(initialCapacity: Int = 0) : Stack<T>() {
 //        println("\nstack size : " + arrayBuffer.size)
         for (i in arrayBuffer) {
             if (i == null) {
-                print(" null")
+                print(" n")
             } else {
                 print(" " + i.toString())
             }
