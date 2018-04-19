@@ -90,7 +90,6 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
             }
         }
 
-        //TODO here we need to move disks from 3rod to 1rod until (top disk in 3rod is < than top [fist and also top disk in 2rod] )
     }
 
     private fun recursiveSecondRodDiskToFirstRodDisk() {
@@ -113,7 +112,7 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
     }
 
     private fun isDone(): Boolean {
-        TODO("not implemented ")
+        return false
     }
 
     private fun tryToMoveDiskFromRodToRod(fromRod: ArrayStack<Int>, toRod: ArrayStack<Int>): Boolean {
@@ -163,7 +162,7 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
                     moveSmallDiskFirstRod(fromRod, firstRodDisks)
 
                 }
-                else -> throw UnsupportedOperationException("this method moves disk only to 2rod or 3rod")
+                else -> throw UnsupportedOperationException("this method moves disk only to 1rod or 3rod")
             }
             println("recursiveMoveDiskFromRodToRod() try to move()main disk after changes")
             printAllRods(firstRodDisks, secondRodDisks, thirdRodDisks)
@@ -185,6 +184,18 @@ class TowerOfHanoi(private val firstRodDisks: ArrayStack<Int>, private val secon
 
     }
 
+    fun printAllRods(rod1: ArrayStack<Int> = firstRodDisks, rod2: ArrayStack<Int> = secondRodDisks,
+                     rod3: ArrayStack<Int> = thirdRodDisks) {
+        print("\nrod1 : ")
+        rod1.printStack()
+        print("\nrod2 : ")
+        rod2.printStack()
+        print("\nrod3 : ")
+        rod3.printStack()
+        println()
+
+
+    }
 }
 
 
@@ -198,22 +209,10 @@ fun main(args: Array<String>) {
     rod2.push(3)
     rod3.push(2)
     rod3.push(1)
-    printAllRods(rod1, rod2, rod3)
 
     val towerOfHanoi = TowerOfHanoi(rod1, rod2, rod3)
+    towerOfHanoi.printAllRods(rod1, rod2, rod3)
+
     towerOfHanoi.MovingTools().moveDiskFromRodToRod(rod2, rod3)
-    printAllRods(rod1, rod2, rod3)
-}
-
-fun printAllRods(rod1: ArrayStack<Int>, rod2: ArrayStack<Int>,
-                 rod3: ArrayStack<Int>) {
-    print("\nrod1 : ")
-    rod1.printStack()
-    print("\nrod2 : ")
-    rod2.printStack()
-    print("\nrod3 : ")
-    rod3.printStack()
-    println()
-
-
+    towerOfHanoi.printAllRods(rod1, rod2, rod3)
 }
