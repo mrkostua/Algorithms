@@ -1,6 +1,7 @@
 package solutionsForBookCrackingTheCodingInterview.StackQueue
 
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author Kostiantyn Prysiazhnyi
@@ -8,9 +9,9 @@ import java.util.*
  */
 
 open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : Stack<T>() {
-    public val defaultCapacity = 20
-    public var topPointer = -1 //empty stack
-    public val arrayBuffer: Array<T?> = if (initialCapacity <= 0) {
+    val defaultCapacity = 20
+    var topPointer = -1 //empty stack
+    val arrayBuffer: Array<T?> = if (initialCapacity <= 0) {
         arrayOfNulls<Any>(defaultCapacity) as Array<T?>
 
     } else {
@@ -41,19 +42,9 @@ open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : S
         return k
     }
 
-/*    override fun peek(): T {
-        if (isEmpty()) {
-            throw RuntimeException("empty stack")
-
-        }
-        return arrayBuffer[topPointer]!!
-
-    }*/
-
-    //TODO for using in TowerOfHanoi.kt
     override fun peek(): T {
         if (isEmpty()) {
-            return Integer.MAX_VALUE as T
+            throw RuntimeException("peek() empty stack")
 
         }
         return arrayBuffer[topPointer]!!
@@ -63,7 +54,6 @@ open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : S
     override fun isEmpty() = topPointer == -1
 
     fun printStack() {
-//        println("\nstack size : " + arrayBuffer.size)
         for (i in arrayBuffer) {
             if (i == null) {
                 print(" n")
@@ -72,4 +62,28 @@ open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : S
             }
         }
     }
+
+    fun getAllElements(): ArrayList<T> {
+        val resultArray = java.util.ArrayList<T>()
+        for (i in arrayBuffer) {
+            if (i != null) {
+                resultArray.add(i)
+
+            }
+        }
+        return resultArray
+    }
+
+    /**
+     * Works properly only if all elements in ArrayStack are unique
+     */
+    override fun containsAll(elements: Collection<T>): Boolean {
+        for (el in elements) {
+            if (!arrayBuffer.contains(el)) {
+                return false
+            }
+        }
+        return true
+    }
+
 }
