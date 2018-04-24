@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview.StackQueue
+package solutionsForBookCrackingTheCodingInterview.stacksAndQueues
 
 import java.util.*
 import kotlin.collections.ArrayList
@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
  */
 
 open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : Stack<T>() {
-    val defaultCapacity = 20
+    private val defaultCapacity = 20
     var topPointer = -1 //empty stack
     val arrayBuffer: Array<T?> = if (initialCapacity <= 0) {
         arrayOfNulls<Any>(defaultCapacity) as Array<T?>
@@ -20,7 +20,7 @@ open class ArrayStack<T>(initialCapacity: Int = 0, val stackNumber: Int = 0) : S
     }
 
     override val size: Int
-        get() = arrayBuffer.size
+        get() = arrayBuffer.count { it != null }
 
     override fun push(item: T): T {
         println("push() item : " + item.toString())

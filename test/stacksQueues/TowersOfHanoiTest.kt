@@ -1,9 +1,11 @@
+package stacksQueues
+
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import solutionsForBookCrackingTheCodingInterview.StackQueue.ArrayStack
-import solutionsForBookCrackingTheCodingInterview.StackQueue.TowersOfHanoi
+import solutionsForBookCrackingTheCodingInterview.stacksAndQueues.ArrayStack
+import solutionsForBookCrackingTheCodingInterview.stacksAndQueues.TowersOfHanoi
 import java.util.*
 import org.junit.Assert.*
 import org.junit.Ignore

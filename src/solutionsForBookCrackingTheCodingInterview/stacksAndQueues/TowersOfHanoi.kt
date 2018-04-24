@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview.StackQueue
+package solutionsForBookCrackingTheCodingInterview.stacksAndQueues
 
 /**
  * @author Kostiantyn Prysiazhnyi

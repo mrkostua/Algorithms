@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview.LinkedList
+package solutionsForBookCrackingTheCodingInterview.linkedLists
 
 /**
  * @author Kostiantyn Prysiazhnyi
@@ -10,7 +10,7 @@ package solutionsForBookCrackingTheCodingInterview.LinkedList
  * only access to that node.
  */
 /**
- * Single LinkedList
+ * Single linkedLists
  */
 fun <T> deleteGivenNode(node: LinkedList2.Node<T>?): Boolean {
     if (node?.next == null) {

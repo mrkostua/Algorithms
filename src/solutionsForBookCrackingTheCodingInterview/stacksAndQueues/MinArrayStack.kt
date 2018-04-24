@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview.StackQueue
+package solutionsForBookCrackingTheCodingInterview.stacksAndQueues
 
 /**
  * @author Kostiantyn Prysiazhnyi
@@ -20,7 +20,7 @@ package solutionsForBookCrackingTheCodingInterview.StackQueue
  * Dynamic stack (stack is growing as long as there is place in array)
  * wrong answer -> array size can't be dynamically increased. Solution is to 3 stacks growing independently one of each others and some way to free up array memory after pop().
  *
- * Solution - is to use stack with StackNode as LinkedList so every element has reference to previous element which in return gives way to add elements of 3 stacks
+ * Solution - is to use stack with StackNode as linkedLists so every element has reference to previous element which in return gives way to add elements of 3 stacks
  * one after one and deleting them just by moving topPointer to previous element. One problem -> by deleting inner element of the array leaves free space( solution is to create additional array
  * with free spaces indexes and after pushing use places from this array first or move whole array after popping which is bad because of additional time and resource complexity.
  *

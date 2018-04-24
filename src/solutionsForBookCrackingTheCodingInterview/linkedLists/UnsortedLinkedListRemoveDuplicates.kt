@@ -1,4 +1,4 @@
-package solutionsForBookCrackingTheCodingInterview.LinkedList
+package solutionsForBookCrackingTheCodingInterview.linkedLists
 
 import java.util.*
 
