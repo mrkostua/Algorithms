@@ -40,7 +40,10 @@ class TwoStacksQueue<T> : QueueInterface<T> {
 
     override fun peekHead(): T {
         if (headStack.isEmpty()) {
-            isEmpty()
+            if(tailStack.isEmpty()){
+                throw UnsupportedOperationException("can't peekHead from empty stack")
+
+            }
             while (!tailStack.isEmpty()) {
                 headStack.push(tailStack.pop())
 
